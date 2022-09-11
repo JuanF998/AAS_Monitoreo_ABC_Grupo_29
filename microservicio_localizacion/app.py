@@ -11,14 +11,27 @@ api = Api(app)
 
 class VistaEstadoLocalizaciones(Resource):
     def get(self):
+        estados_sensores = []
         try:
-            content = requests.get('http://127.0.0.1:5003/sensor/estado')
-            
-            if content.status_code == 404:
-                return content.json(), 404
-            else:
-                return content.json()
+            content1 = requests.get('http://127.0.0.1:5003/sensor_ambiente/estado')
+            estados_sensores.append(content1.json())
         except: 
-            return 'Conection lost'  
+            estados_sensores.append(False) 
+
+        try:
+            content2 = requests.get('http://127.0.0.1:5004/sensor_puertas_ventanas/estado')
+            estados_sensores.append(content2.json())
+        except: 
+            estados_sensores.append(False) 
+
+        try:
+            content3 = requests.get('http://127.0.0.1:5005/sensor_signos_vitales/estado')
+            estados_sensores.append(content3.json())
+        except: 
+            estados_sensores.append(False) 
+            
+        return estados_sensores
+
+
 
 api.add_resource(VistaEstadoLocalizaciones, '/localizaciones/estado')
