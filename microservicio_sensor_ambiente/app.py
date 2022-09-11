@@ -1,4 +1,5 @@
 import json
+import random
 from microservicio_sensor_ambiente import create_app
 from flask_restful import Resource, Api
 from flask import Flask, request
@@ -24,7 +25,10 @@ api = Api(app)
 
 class VistaEnviarEstadoSensorAmbiente(Resource):
     def get(self):
-        nuevo_registro = SensorAmbiente(estado = True)
-        return True
+        estado_sensor = bool(random.getrandbits(1))
+        nuevo_registro = SensorAmbiente(estado = estado_sensor)
+        db.session.add(nuevo_registro)
+        db.session.commit()
+        return estado_sensor
 
 api.add_resource(VistaEnviarEstadoSensorAmbiente, '/sensor_ambiente/estado')

@@ -36,8 +36,10 @@ class VistaMonitorearEstadoLocalizacion(Resource):
                 return content.json(), 404
             else:
                 return content.json()
-                
         except: 
+            nuevo_registro = Monitor(estado_localizacion= False, localizacion='Localizacion_de_prueba')
+            db.session.add(nuevo_registro)
+            db.session.commit()
             return 'Conection lost'  
 api.add_resource(VistaMonitorearEstadoLocalizacion, '/monitoreo/localizaciones')
 
