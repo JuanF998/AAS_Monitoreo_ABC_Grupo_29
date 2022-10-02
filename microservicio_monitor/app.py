@@ -24,27 +24,31 @@ db.create_all()
 
 api = Api(app)
 
-class VistaMonitorearEstadoLocalizacion(Resource):
+class VistaMonitorearEstadoAutenticaciones(Resource):
     def get(self):
-        try:
-            content = requests.get('http://127.0.0.1:5001/localizaciones/estado')
-            estado_localizaciones = all(content.json())
-            nuevo_registro = Monitor(estado_localizacion=estado_localizaciones, localizacion='Localizacion_de_prueba')
+        content = requests.get('http://127.0.0.1:5001/autenticacion/habilitado')
+        habilitado_autenticacion = all(content.json())
+        if habilitado_autenticacion:
+            nuevo_registro = Monitor(habilitado_autenticacion=habilitado_autenticacion, registro='IP Valida')
             db.session.add(nuevo_registro)
             db.session.commit()
             if content.status_code == 404:
                 return content.json(), 404
             else:
                 return content.json()
-        except: 
-            nuevo_registro = Monitor(estado_localizacion= False, localizacion='Localizacion_de_prueba')
+        else:
+            nuevo_registro = Monitor(habilitado_autenticacion=habilitado_autenticacion, registro='IP NO Valida')
             db.session.add(nuevo_registro)
             db.session.commit()
-            return 'Conection lost'  
-api.add_resource(VistaMonitorearEstadoLocalizacion, '/monitoreo/localizaciones')
+            if content.status_code == 404:
+                return content.json(), 404
+            else:
+                return content.json()
+                    
+api.add_resource(VistaMonitorearEstadoAutenticaciones, '/monitoreo/habilitado')
 
 
-x = VistaMonitorearEstadoLocalizacion()
+x = VistaMonitorearEstadoAutenticaciones()
 starttime = time.time()
 while True:
     result = x.get()

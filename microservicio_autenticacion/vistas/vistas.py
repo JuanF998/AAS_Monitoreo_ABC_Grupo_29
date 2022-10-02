@@ -21,3 +21,7 @@ class VistaLogIn(Resource):
                 else:
                     return "El usuario se encuentra desactivado", 401
             return "El usuario no está autorizado desde el origen de conexion", 401
+
+    def get(self):
+        usuario = Usuario.query.filter(Usuario.usuario == request.json["usuario"], Usuario.contrasena == request.json["contrasena"]).first()
+        return usuario.habilitado

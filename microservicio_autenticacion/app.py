@@ -11,7 +11,6 @@ from flask_jwt_extended import get_jwt
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
-
 app = create_app('default')
 app.config['JWT_SECRET_KEY'] = 'frase-secreta'
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -30,7 +29,7 @@ def autenticarOperador(self):
             "usuario": "operador1",
             "contrasena": "1234"
         }
-        content = requests.post('http://127.0.0.1:5000/signin', json = usuario)
+        content = requests.post('http://127.0.0.1:5002/signin', json = usuario)
         if content.status_code == 404:
             return content.json(), 404
         else:
