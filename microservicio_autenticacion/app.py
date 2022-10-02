@@ -30,7 +30,7 @@ def autenticarOperador(self):
             "usuario": "operador1",
             "contrasena": "1234"
         }
-        content = requests.post('http://127.0.0.1:5002/signin', json = usuario)
+        content = requests.post('http://127.0.0.1:5000/signin', json = usuario)
         if content.status_code == 404:
             return content.json(), 404
         else:

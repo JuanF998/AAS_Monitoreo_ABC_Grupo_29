@@ -9,11 +9,15 @@ usuario_schema = UsuarioSchema()
 class VistaLogIn(Resource):
 
     def post(self):
+        print(request.remote_addr)
         usuario = Usuario.query.filter(Usuario.usuario == request.json["usuario"], Usuario.contrasena == request.json["contrasena"]).first()
         if usuario is None:
             return "El usuario no existe", 404
         else:
-            if(Usuario.ip_autorizada == request.remote_addr and  Usuario.habilitado == True):
-                token_de_acceso = create_access_token(identity=usuario.id)
-                return {"mensaje": "Inicio de sesión exitoso", "token": token_de_acceso}
-            return "El usuario está autorizado", 401
+            if(usuario.ip_autorizada == request.remote_addr):
+                if(usuario.habilitado == True):
+                    token_de_acceso = create_access_token(identity=usuario.id)
+                    return {"mensaje": "Inicio de sesión exitoso", "token": token_de_acceso}
+                else:
+                    return "El usuario se encuentra desactivado", 401
+            return "El usuario no está autorizado desde el origen de conexion", 401
