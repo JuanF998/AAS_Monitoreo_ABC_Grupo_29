@@ -24,39 +24,29 @@ db.create_all()
 
 api = Api(app)
 
+
 class VistaMonitorearEstadoAutenticaciones(Resource):
-    def get(self):
-        content = requests.get('http://127.0.0.1:5001/autenticacion/habilitado')
-        habilitado_autenticacion = all(content.json())
-        if habilitado_autenticacion:
-            nuevo_registro = Monitor(habilitado_autenticacion=habilitado_autenticacion, registro='IP Valida')
-            db.session.add(nuevo_registro)
-            db.session.commit()
-            if content.status_code == 404:
-                return content.json(), 404
-            else:
-                return content.json()
+    def post(self):
+        nuevo_registro = Monitor(habilitado=True, registro='IP Valida')
+        db.session.add(nuevo_registro)
+        db.session.commit()
+        if nuevo_registro.registro == 'IP Valida':
+            return {"mensaje": "Acceso confiable", "bloqueo": False}
         else:
-            nuevo_registro = Monitor(habilitado_autenticacion=habilitado_autenticacion, registro='IP NO Valida')
-            db.session.add(nuevo_registro)
-            db.session.commit()
-            if content.status_code == 404:
-                return content.json(), 404
-            else:
-                return content.json()
+            return {"mensaje": "Acceso no confiable", "bloqueo": True}
                     
-api.add_resource(VistaMonitorearEstadoAutenticaciones, '/monitoreo/habilitado')
+api.add_resource(VistaMonitorearEstadoAutenticaciones, '/monitoreo/habilitado/')
 
 
-x = VistaMonitorearEstadoAutenticaciones()
-starttime = time.time()
-while True:
-    result = x.get()
-    print(result)
-    # if result == 'Conection lost':
-    #     os.chdir(r"C:\Users\CrackMayo\Desktop\Experimento_Disponiblidad_Montorio_ABC\microservicio_localizacion")
-    #     proc = subprocess.Popen(['flask', 'run', '-p', '5001'])
+# x = VistaMonitorearEstadoAutenticaciones()
+# starttime = time.time()
+# while True:
+#     result = x.get()
+#     print(result)
+#     # if result == 'Conection lost':
+#     #     os.chdir(r"C:\Users\CrackMayo\Desktop\Experimento_Disponiblidad_Montorio_ABC\microservicio_localizacion")
+#     #     proc = subprocess.Popen(['flask', 'run', '-p', '5001'])
 
-    time.sleep(1.0 - ((time.time() - starttime) % 1.0))
+#     time.sleep(1.0 - ((time.time() - starttime) % 1.0))
 
 
