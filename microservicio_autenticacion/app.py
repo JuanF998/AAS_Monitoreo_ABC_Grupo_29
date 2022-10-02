@@ -29,10 +29,13 @@ def autenticarOperador(self):
             "usuario": "operador1",
             "contrasena": "1234"
         }
+        print("entro")
         content = requests.post('http://127.0.0.1:5002/signin', json = usuario)
         if content.status_code == 404:
             return content.json(), 404
         else:
+            token_de_acceso = create_access_token(identity="operador1")
+            print(token_de_acceso)
             return content.json()
     except ValueError:
         print("Se perdió la conexión")
