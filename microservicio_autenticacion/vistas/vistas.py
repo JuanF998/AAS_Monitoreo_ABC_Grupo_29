@@ -17,8 +17,9 @@ class VistaLogIn(Resource):
         else:
             if(usuario.ip_autorizada == request.remote_addr):
                 if(usuario.habilitado == True):
-                    token_de_acceso = create_access_token(identity=usuario.id)
-                    
+                    additional_claims = {"permiso": usuario.permiso}
+                    #asigna al body del jwt los permisos que tiene acceso el usuario
+                    token_de_acceso = create_access_token(identity=usuario.id,additional_claims=additional_claims)                    
                     return {"mensaje": "Inicio de sesión exitoso", "token": token_de_acceso}
                 else:
                     return "El usuario se encuentra desactivado", 401

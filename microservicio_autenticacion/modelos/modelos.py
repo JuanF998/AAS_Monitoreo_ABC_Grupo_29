@@ -11,6 +11,8 @@ class Usuario(db.Model):
     contrasena = db.Column(db.String(50))
     ip_autorizada = db. Column((db.String(12)))
     habilitado = db.Column(db.Boolean, default=True)
+    permiso=db.Column((db.String(100)))
+
 
 class UsuarioSchema(SQLAlchemyAutoSchema):
     class Meta:
