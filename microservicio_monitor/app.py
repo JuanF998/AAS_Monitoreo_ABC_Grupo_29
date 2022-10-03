@@ -2,14 +2,11 @@ import json
 from microservicio_monitor import create_app
 from flask_restful import Resource, Api
 from flask import Flask, request
-
 from microservicio_monitor.modelos.modelos import Monitor
 from .modelos import db
 import requests
 import json 
 import time
-import subprocess
-import os
 from flask import request
 from .modelos import db, Monitor, MonitorSchema
 from flask_restful import Resource
@@ -57,33 +54,18 @@ api.add_resource(VistaMonitorearEstadoAutenticaciones, '/monitoreo/habilitado/')
 
 
 
-def autenticarOperador(usuario):
-    try:
-        
-        print("entro")
-        content = requests.post('http://127.0.0.1:5002/signin', json = usuario)
-        if content.status_code == 404:
-            return content.json(), 404
-        else:            
-            return content.json()
-    except ValueError:
-        print("Se perdió la conexión")
+
+# while True:
 
 
-starttime = time.time()
-operadores = [{"usuario": "operador1","contrasena": "1234"},{"usuario": "operador2","contrasena": "12342"},{"usuario": "operador3","contrasena": "12343"},{"usuario": "operador4","contrasena": "12344"},{"usuario": "operador5","contrasena": "1235"}\
-    ,{"usuario": "operador1","contrasena": "111"},{"usuario": "operador2","contrasena": "111"},{"usuario": "operador3","contrasena": "111"},{"usuario": "operador4","contrasena": "111"},{"usuario": "operador5","contrasena": "111"}]
-while True:
+#     #usuario = {"usuario": "operador1","contrasena": "1234"}
+#     result = autenticarOperador(random.choice(operadores))
+#     print(result)
+#     # if result == 'Conection lost':
+#     #     os.chdir(r"C:\Users\CrackMayo\Desktop\Experimento_Disponiblidad_Montorio_ABC\microservicio_localizacion")
+#     #     proc = subprocess.Popen(['flask', 'run', '-p', '5001'])
 
-
-    #usuario = {"usuario": "operador1","contrasena": "1234"}
-    result = autenticarOperador(random.choice(operadores))
-    print(result)
-    # if result == 'Conection lost':
-    #     os.chdir(r"C:\Users\CrackMayo\Desktop\Experimento_Disponiblidad_Montorio_ABC\microservicio_localizacion")
-    #     proc = subprocess.Popen(['flask', 'run', '-p', '5001'])
-
-    time.sleep(5.0 - ((time.time() - starttime) % 5.0))
+#     time.sleep(5.0 - ((time.time() - starttime) % 5.0))
 
 
 
